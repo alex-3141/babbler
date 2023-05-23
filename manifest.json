@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Babbler",
+  "version": "0.2.1",
+  "description": "Realtime video translation on any website",
+  "permissions": ["activeTab","storage","webNavigation","tabs","downloads","unlimitedStorage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "icon128.png",
+      "48": "icon48.png",
+      "16": "icon16.png"
+    }
+  },
+  "icons": {
+      "128": "icon128.png",
+      "48": "icon48.png",
+      "16": "icon16.png"
+  },
+  "host_permissions": [
+    "https://www.youtube.com/",
+    "https://www.twitch.tv/"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["settings.js", "content_script.js"]
+    }
+  ]
+}

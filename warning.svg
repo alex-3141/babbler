@@ -1,0 +1,7 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+	<!-- Warning sign -->
+	<polygon points="100,10 190,180 10,180" fill="yellow" stroke="black" stroke-width="5" />
+	<!-- Exclamation mark -->
+	<rect x="90" y="60" width="20" height="80" fill="black" />
+	<circle cx="100" cy="160" r="10" fill="black" />
+</svg>

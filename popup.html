@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babbler</title>
+    <script src="popup.js"></script>
+    <script src="settings.js"></script>
+    <style>
+        :root {
+            --main-color: #3c5d99;
+            --main-bg-color: #fcfffa;
+            --experimental-color: #703C9A;
+            --debug-color: #9A793C;
+        }
+        body {
+            background-color: var(--main-bg-color);
+            color: var(--main-color);
+        }
+        table {
+            border-collapse: collapse;
+            height: 100%;
+            width: 300px;
+        }
+        a {
+            color: var(--main-color);
+            font-weight: bold;
+        }
+        th, td {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 5px;
+            width: 50%;
+        }
+        .rowtitle {
+            height: 10px;
+            width: 100%;
+            padding: 2px
+        }
+        .blocktitle {
+            border-radius: 5px;
+            height: 20px;
+            width: 100%;
+            padding: 2px;
+            font-weight: bold;
+            color: var(--main-bg-color);
+            background-color: var(--main-color);
+        }
+        .spacer {
+            height: 20px;
+        }
+        button {
+            font-size: 1.2em;
+            border: 2px solid var(--main-color);
+            border-radius: 5px;
+            color: var(--main-color);
+            background-color: transparent;
+            cursor: pointer;
+            outline: none;
+            width: 95%;
+            height: 65px;
+            padding: 3px 6px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        button.enabled {
+            background-color: var(--main-color);
+            color: var(--main-bg-color);
+        }
+        .apikey {
+            width: 95%;
+        }
+        #spinner {
+            width: 1.5em;
+            height: 1.5em;
+        }
+        .reset {
+            width: 1.5em;
+            height: 1.5em;
+            filter: 'brightness(2%)';
+        }
+        .debug {
+            display: none;
+            color: var(--debug-color);
+        }
+        .experimental {
+            display: none;
+            color: var(--experimental-color);
+        }  
+        .experimental .blocktitle {
+            color: var(--main-bg-color);
+            background-color: var(--experimental-color);
+        }
+        .experimental button {
+            border-color: var(--experimental-color);
+            color: var(--experimental-color);
+        }
+        .experimental button.enabled {
+            background-color: var(--experimental-color);
+            color: var(--main-bg-color);
+        }
+        .debug .blocktitle {
+            color: var(--main-bg-color);
+            background-color: var(--debug-color);
+        }
+        .debug button {
+            border-color: var(--debug-color);
+            color: var(--debug-color);
+        }
+        .debug button.enabled {
+            background-color: var(--debug-color);
+            color: var(--main-bg-color);
+        }
+        .slider {
+            display: flex;
+            align-items: center;
+        }
+        .sliderInfo {
+            width: 12%;
+            padding: 4px;
+        }
+        .sliderText {
+            color: var(--debug-color);
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            display: flex;
+            align-items: right;
+        }
+
+        input[type=range] {
+            accent-color: var(--main-color);
+        }
+        .expermental input[type=range] {
+            accent-color: var(--experimental-color);
+        }
+        .debug input[type=range] {
+            accent-color: var(--debug-color);
+        }
+
+    </style>
+</head>
+<body>
+    <table>
+        <tr><td colspan="2"><button id="startButton">Enable/Disable Addon</button></td></tr>
+        <tr>
+            <td><button id="subtitleColorButton">Themed Subtitle Colors</button></td>
+            <td><button id="transcribeButton">Transcribe Mode</button></td>
+        </tr>
+        <tr>
+            <td><button id="experimentalButton">Experimental Features</button></td>
+            <td><button id="debugButton">Debug/Testing Mode</button></td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr><td colspan="2">OpenAI API Key</td></tr>
+        <tr>
+        <td colspan="2">
+            <div id="apiKeyDiv" style="display: flex; align-items: center;">
+                <!-- <div style="width: 8%; display: flex;">
+                    <img class="reset" id="resetApiKey" src="./reset.svg" width="100%">
+                </div> -->
+                <div style="flex-grow: 1;">
+                    <input id="apiKey" class="apikey" placeholder="Enter API key here" type="password" oncopy="return false" autocomplete="off">
+                </div>
+                <div style="width: 8%; display: flex;">
+                    <img id="spinner" src="./warning.svg" width="100%">
+                </div>
+            </div>
+        </td>
+        </tr>
+        <tr>
+            <td id="apiInfo" colspan="2">
+                Get your OpenAI API key <a target="_blank" rel="noopener noreferrer" href="https://platform.openai.com/account/api-keys">from here</a> 
+            </td>
+        </tr>
+
+        <!-- Experimental options -->
+        <tr class="experimental spacer"></tr>
+        <tr class="experimental"><td class="blocktitle" colspan="2">EXPERIMENTAL FEATURES</td></tr>
+        <tr class="experimental">
+            <td  colspan="2">
+                Planned features. None are implemented yet.
+            </td>
+        </tr>
+        <tr class="experimental">
+            <td><button id="subtitleAlignButton">Subtitle Re-alignment</button></td>
+            <td><button id="autoDubButton">Auto Dub</button></td>
+        </tr>
+        <tr class="experimental">
+            <td><button id="gpt4TranslationButton">Two-step Translation</button></td>
+            <td><button id="tlNoteButton">Translator Notes</button></td>
+        </tr>
+        <tr class="experimental">
+            <td><button id="learningModeButton">Language Learning Mode</button></td>
+            <td><button id="sideBySideButton">Side-by-side Translation</button></td>
+        </tr>
+        <tr class="experimental">
+            <td><button id="compressionButton">Audio time compression</button></td>
+        </tr>
+
+        <!-- Debing options -->
+
+        <tr class="debug spacer"></tr>
+        <tr class="debug"><td class="blocktitle" colspan="2">DEBUG MENU</td></tr>
+
+        <!-- Overlap Length -->
+        <tr class="debug"><td class="rowtitle" colspan="2">Overlap Length</td></tr>
+        <tr class="debug"><td colspan="2">
+            <div class="slider">
+                <!-- <div style="width: 8%; display: flex;">
+                    <img class="reset" src="./reset.svg" width="100%">
+                </div> -->
+                <div style="flex-grow: 1;">
+                    <input type="range" min="0" max="5" value="0" step="0.1" id="overlapLengthSlider" style="width: 100%;">
+                </div>
+                <div class="sliderInfo">
+                    <input id="overlapLengthSliderText" class="sliderText" placeholder="5s" autocomplete="off">
+                </div>
+            </div>
+        </td></tr>
+
+        <!-- Snippet Length -->
+        <tr class="debug"><td class="rowtitle" colspan="2">Snippet Length</td></tr>
+        <tr class="debug"><td colspan="2">
+            <div class="slider">
+                <!-- <div style="width: 8%; display: flex;">
+                    <img class="reset" src="./reset.svg" width="100%">
+                </div> -->
+                <div style="flex-grow: 1;">
+                    <input type="range" min="2" max="10" value="0" step="0.1" id="snippetLengthSlider" style="width: 100%;">
+                </div>
+                <div class="sliderInfo">
+                    <input id="snippetLengthSliderText" class="sliderText" placeholder="5s" autocomplete="off">
+                </div>
+            </div>
+        </td></tr>
+
+        <!-- Timeout Length -->
+        <tr class="debug"><td class="rowtitle" colspan="2">Timeout Length</td></tr>
+        <tr class="debug"><td colspan="2">
+            <div class="slider">
+                <!-- <div style="width: 8%; display: flex;">
+                    <img class="reset" src="./reset.svg" width="100%">
+                </div> -->
+                <div style="flex-grow: 1;">
+                    <input type="range" min="2" max="20" value="0" step="0.1" id="timeoutLengthSlider" style="width: 100%;">
+                </div>
+                <div class="sliderInfo">
+                    <input id="timeoutLengthSliderText" class="sliderText" placeholder="5000ms" autocomplete="off">
+                </div>
+            </div>
+        </td></tr>
+
+        <!-- Temperature -->
+        <tr class="debug"><td class="rowtitle" colspan="2">Temperature</td></tr>
+        <tr class="debug"><td colspan="2">
+            <div class="slider">
+                <!-- <div style="width: 8%; display: flex;">
+                    <img class="reset" src="./reset.svg" width="100%">
+                </div> -->
+                <div style="flex-grow: 1;">
+                    <input type="range" min="0" max="1" value="0" step="0.02" id="temperatureSlider" style="width: 100%;">
+                </div>
+                <div class="sliderInfo">
+                    <input id="temperatureSliderText" class="sliderText" placeholder="0.2" autocomplete="off">
+                </div>
+            </div>
+        </td></tr>
+
+        <!-- Non-Speech Probability Cutoff -->
+        <tr class="debug"><td class="rowtitle" colspan="2">Non-Speech Probability Cutoff</td></tr>
+        <tr class="debug"><td colspan="2">
+            <div class="slider">
+                <!-- <div style="width: 8%; display: flex;">
+                    <img class="reset" src="./reset.svg" width="100%">
+                </div> -->
+                <div style="flex-grow: 1;">
+                    <input type="range" min="0" max="1" value="0" step="0.01" id="noSpeechSlider" style="width: 100%;">
+                </div>
+                <div class="sliderInfo">
+                    <input id="noSpeechSliderText" class="sliderText" placeholder="0.65" autocomplete="off">
+                </div>
+            </div>
+        </td></tr>
+
+        <!-- Average Log Probability Cutoff -->
+        <tr class="debug"><td class="rowtitle" colspan="2">Average Log Probability Cutoff</td></tr>
+        <tr class="debug"><td colspan="2">
+            <div class="slider">
+                <!-- <div style="width: 8%; display: flex;">
+                    <img class="reset" src="./reset.svg" width="100%">
+                </div> -->
+                <div style="flex-grow: 1;">
+                    <input type="range" min="-1.5" max="0" value="0" step="0.01" id="probSlider" style="width: 100%;">
+                </div>
+                <div class="sliderInfo">
+                    <input id="probSliderText" class="sliderText" placeholder="-0.5" autocomplete="off">
+                </div>
+            </div>
+        </td></tr>
+        
+        <!-- Compression Ratio Cutoff -->
+        <tr class="debug"><td class="rowtitle" colspan="2">Compression Ratio Cutoff</td></tr>
+        <tr class="debug"><td colspan="2">
+            <div class="slider">
+                <!-- <div style="width: 8%; display: flex;">
+                    <img class="reset" src="./reset.svg" width="100%">
+                </div> -->
+                <div style="flex-grow: 1;">
+                    <input type="range" min="0" max="20" value="0" step="0.1" id="compressionSlider" style="width: 100%;">
+                </div>
+                <div class="sliderInfo">
+                    <input id="compressionSliderText" class="sliderText" placeholder="∞" autocomplete="off">
+                </div>
+            </div>
+        </td></tr>
+        
+        <tr class="debug">
+            <td><button id="showBordersButton">Show HTML Borders</button></td>
+            <td><button id="promptFeedbackButton">Prompt feedback loop</button></td>
+        </tr>
+        <tr class="debug">
+            <td><button id="zapperButton">Bad phrase zapper</button></td>
+            <td><button id="phraseManagerButton">Bad phrase manager</button></td>
+        </tr>
+
+        <tr class="debug">
+            <td><button id="debugConsoleButton">Debug console</button></td>
+            <td><button id="errorConsoleButton">Error console</button></td>
+        </tr>
+        <tr class="debug">
+            <td><button id="clearDebugLogsButton">Clear debug logs</button></td>
+            <td><button id="clearErrorLogsButton">Clear error logs</button></td>
+        </tr>
+        <tr class="debug">
+            <td><button id="restoreDefaultSettingsButton">Reset Settings</button></td>
+            <td><button id="exportDataButton">Export Debug Data</button></td>
+        </tr>
+
+    </table>
+</body>
+</html>

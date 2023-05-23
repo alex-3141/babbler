@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bad phrase manager</title>
+    <script src="phrases.js"></script>
+    <script src="settings.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: medium;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            align-items: center;
+        }
+
+        h1 {
+            color: #222;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            background-color: #ffffff;
+        }
+
+        p {
+          text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .text-cell {
+            width: 80%;
+            text-align: left;
+        }
+
+        .audio-cell {
+            width: 10%;
+            text-align: center;
+        }
+
+        .delete-cell {
+            width: 10%;
+            text-align: center;
+        }
+
+        audio {
+            width: 100%;
+        }
+
+        img {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Bad phrase manager</h1>
+    <p>Bad phrases are words the AI hallucinates that the speaker never said. This is caused by background noises or incomplete words being interpreted as speech</p>
+    <p>Note: Phrases are based on tokens. Because of this, multiple tokens can have the same text. Mouse over a line to see it's tokens.</p>
+    <table id="badPhraseTable">
+    </table>
+</body>
+</html>
