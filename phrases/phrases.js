@@ -37,7 +37,7 @@ function populatePhraseList(){
         const audioDiv = document.createElement('div');
         const playButton = document.createElement('button');
         const playImg = document.createElement('img');
-        playImg.src = './play.svg';
+        playImg.src = 'img/play.svg';
         playButton.appendChild(playImg);
         const audioElement = document.createElement('audio');
         audioDiv.append(playButton, audioElement);
@@ -48,7 +48,7 @@ function populatePhraseList(){
         const deleteDiv = document.createElement('div');
         const deleteButton = document.createElement('button');
         const deleteImg = document.createElement('img');
-        deleteImg.src = './cross.svg';
+        deleteImg.src = 'img/cross.svg';
         deleteButton.appendChild(deleteImg);
         deleteDiv.appendChild(deleteButton);
         deleteCell.appendChild(deleteDiv);

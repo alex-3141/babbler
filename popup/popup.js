@@ -261,12 +261,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const apiKeyDiv = document.getElementById('apiKeyDiv');
   apiKeyDiv.addEventListener('mouseover', () => {
     if(getSetting('apiKey')){
-      spinner.src = './reset.svg'
+      spinner.src = 'img/reset.svg'
     }
   });
   apiKeyDiv.addEventListener('mouseout', () => {
     if(getSetting('apiKey')){
-      spinner.src = './check.svg'
+      spinner.src = 'img/check.svg'
     }
   });
 
@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Phrase manager
   phraseManagerButton.addEventListener('click', () => {
     momentaryButtonPress('phraseManagerButton');
-    chrome.tabs.create({ url: 'phrases.html' });
+    chrome.tabs.create({ url: '/phrases/phrases.html' });
   })
 
   clearDebugLogsButton.addEventListener('click', () => {
@@ -445,14 +445,14 @@ function fillApiKeyBox(){
   const apiKeyField = document.getElementById('apiKey');
   apiKeyField.placeholder = "●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●";
   const spinner = document.getElementById('spinner');
-  spinner.src = "./check.svg";
+  spinner.src = "img/check.svg";
 }
 
 function clearApiKeyBox(){
   const apiKeyField = document.getElementById('apiKey');
   apiKeyField.placeholder = 'Enter API key here';
   const spinner = document.getElementById('spinner');
-  spinner.src = "./warning.svg";
+  spinner.src = "img/warning.svg";
 }
 
 function setButton(buttonId, savedValue) {
@@ -472,10 +472,10 @@ async function validateAPIKey(input){
   const key = input.trim();
   // API key lengths are 51 chars
   if(key.length != 51){
-    spinner.src = "./warning.svg";
+    spinner.src = "img/warning.svg";
     return;
   }
-  spinner.src = "./gear.svg";
+  spinner.src = "img/gear.svg";
   const apiURL = 'https://api.openai.com/v1/models/whisper-1';
   const timeout = getSetting('timeout');
   const requestOptions = {
@@ -492,19 +492,19 @@ async function validateAPIKey(input){
       if(apiResult.error){
         if(apiResult.error.code == "invalid_api_key"){
           // Invalid API key
-          spinner.src = "./cross.svg";
+          spinner.src = "img/cross.svg";
         } else if(apiResult.error.code == "something"){
           // 
-          spinner.src = "./cross.svg";
+          spinner.src = "img/cross.svg";
         } else {
           // unknown error
           //alert(`Unknown OpenAI error occurred: ${error.message}. Please tell Alex!`);
           console.error(apiResult);
-          spinner.src = "./warning.svg";
+          spinner.src = "img/warning.svg";
         }
       } else {
           // API key successfully validated
-          spinner.src = "./check.svg";
+          spinner.src = "img/check.svg";
           setSetting('apiKey', key);
         }
     }
@@ -513,12 +513,12 @@ async function validateAPIKey(input){
     if (error.message === 'Request timeout') {
       console.log('dropping slow request');
       // TODO: Communicate a warning message
-      spinner.src = "./warning.svg";
+      spinner.src = "img/warning.svg";
     } else{
     // TODO: Indicate different error types
       //alert(`Unknown network error occurred: ${error.message}. Please tell Alex!`);
       console.error(error);
-      spinner.src = "./warning.svg";
+      spinner.src = "img/warning.svg";
     }
   }
 }
