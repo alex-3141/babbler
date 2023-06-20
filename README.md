@@ -1,5 +1,7 @@
 # babbler
-### Realtime video translation on any website using OpenAI's Whisper API.
+### Realtime AI video translation on any website using OpenAI's Whisper API.
+
+![Preview image](https://i.imgur.com/ayXKB6x.png)
 ## Description
 This is a chrome web extension that provides realtime translated subtitles on any website by using OpenAI's Whisper web API.
 
