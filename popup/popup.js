@@ -1,5 +1,8 @@
 // button name => content script setting convertion is done within each individual button's onclick event listener
 
+// Quick fix to debounce input
+let apiKeyInputTimeout = 0;
+
 document.addEventListener('DOMContentLoaded', () => {
   const startButton = document.getElementById('startButton');
   const subtitleColorButton = document.getElementById('subtitleColorButton');
@@ -276,7 +279,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   apiKey.addEventListener('input', () => {
-    validateAPIKey(apiKey.value);
+    if (apiKeyInputTimeout) {
+      clearTimeout(apiKeyInputTimeout);
+    }
+
+    const key = apiKey.value;
+
+    apiKeyInputTimeout = setTimeout(() => {
+      if(key.length < 1){
+        return;
+      }
+      validateAPIKey(key);
+    }, 700);
   });
   // Show HTML Borders Button
   showBordersButton.addEventListener('click', () => {
@@ -470,11 +484,6 @@ function setButton(buttonId, savedValue) {
 async function validateAPIKey(input){
   let spinner = document.getElementById('spinner');
   const key = input.trim();
-  // API key lengths are 51 chars
-  if(key.length != 51){
-    spinner.src = "img/warning.svg";
-    return;
-  }
   spinner.src = "img/gear.svg";
   const apiURL = 'https://api.openai.com/v1/models/whisper-1';
   const timeout = getSetting('timeout');
